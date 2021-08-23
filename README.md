@@ -7,3 +7,7 @@
   - Python办公效率化
 ## 学习回顾
 ### Python入门课Pro
+## 包管理
+What I installed：
+- [Rich](https://github.com/willmcgugan/rich)
+- [Requests](https://github.com/psf/requests)
