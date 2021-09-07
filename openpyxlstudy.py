@@ -35,3 +35,54 @@ for rowData in orderSheet.rows:
     priceIndex = openpyxl.utils.cell.column_index_from_string("I") - 1
     price = rowData[priceIndex].value
     print(price)
+
+"""
+对于重复的取表，可以采用定义函数的方法，将上述内容打包为函数。
+"""
+# 将计算单月销售额的步骤移到函数getMonthlySold中
+# 获取单月“火龙果可乐”销售额的函数
+# 参数 filePath: 销售数据Excel文件路径
+# 返回值: 计算出的销售额结果
+def getMonthlySold(filePath):
+    # 使用openpyxl.load_workbook()函数读取工作簿
+    # 文件路径使用函数参数filePath，然后赋值给变量wb
+    # 添加data_only=True打开工作簿，获取公式计算后的值
+    wb = openpyxl.load_workbook(filePath, data_only = True)
+
+    # 通过工作簿对象wb获取名为“销售订单数据”的工作表对象，并赋值给变量orderSheet
+    orderSheet = wb["销售订单数据"]
+
+    # 定义一个变量colaSold用来表示本月“火龙果可乐”的销售金额
+    colaSold = 0
+
+    # 遍历工作表的所有行数据
+    for rowData in orderSheet.rows:
+        productName = rowData[2].value
+        priceIndex = openpyxl.utils.cell.column_index_from_string("I") - 1
+        price = rowData[priceIndex].value
+        
+        if productName == "目标":
+            colaSold = colaSold + price
+
+    return colaSold
+
+# 接下来，通过观察销售订单的Excel文件名，我们可以发现，每个文件名仅有月份数字不同。
+# 因此，我们可以很方便的使用for循环加range()函数，配合上格式化字符串，来批量生成每个Excel表格的文件路径：2019年{month}月销售订单.xlsx。
+# 再把这个文件路径传入到getMonthlySold函数中，来计算各个月份的销售额。最后逐个添加到一个列表soldList中。
+
+soldList = []
+
+for month in range(1,13):
+    monthlySold = getMonthlySold(f"2019年{month}月销售订单.xlsx")
+    soldList.append(monthlySold)
+print(soldList)
+
+# 要获取一个列表中的最大值，可以使用Python内置的max()函数。
+maxSold = max(soldList)
+print(maxSold)
+
+# 当我们知道了列表中的一个元素，想要去列表中找到这个元素位于什么位置，可以使用列表的index()函数。
+# 通过要查询的列表对象使用index()函数，将要查询的元素作为参数传入，则该元素从左往右第一次出现的索引将会被返回。
+# 如果查询的元素不在列表中，会报一个ValueError的错误。
+maxMonth = soldList.index(maxSold) + 1
+print(f"火龙果可乐在{maxMonth}月份卖得最好")
