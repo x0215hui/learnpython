@@ -11,3 +11,4 @@
 What I installed：
 - [Rich](https://github.com/willmcgugan/rich)
 - [Requests](https://github.com/psf/requests)
+- [openpyxl](https://openpyxl.readthedocs.io/en/stable/)
